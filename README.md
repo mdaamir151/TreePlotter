@@ -4,27 +4,27 @@ Use browserify to generate bundle.js after making changes in any other js file
 
 # Usage Example
 
-const t1 = [
-  { id: 1, value: 1, children: [2, 3] }, // head  
-  { id: 2, value: 2, children: [4, 5] },  
-  { id: 3, value: 3, children: [6, 7] },  
+const t1 = [  
+  { id: 1, value: 1, l: 2, r: 3 }, // head  
+  { id: 2, value: 2, l: 4, r: 5 },  
+  { id: 3, value: 3, l: 6, r: 7 },  
   { id: 4, value: 4 },  
   { id: 5, value: 5 },  
   { id: 6, value: 6 },  
   { id: 7, value: 7 }  
 ]
 
-const t2 = [
-  { id: 1, value: 1, children: [2] }, // head  
-  { id: 2, value: 2, children: [4, 3] },  
-  { id: 3, value: 3, children: [6, 7] },  
-  { id: 4, value: 4, children: [5] },  
+const t2 = [  
+  { id: 1, value: 1, l: 2 }, // head  
+  { id: 2, value: 2, l: 4, r: 3 },  
+  { id: 3, value: 3, l: 6, r: 7 },  
+  { id: 4, value: 4, l: 5 },  
   { id: 5, value: 5 },  
   { id: 6, value: 6 },  
   { id: 7, value: 7 }  
 ]
 
-const t3 = [
+const t3 = [  
   { id: 1, value: 'A', r: 2, l: 8 }, // head  
   { id: 2, value: 'B', r: 4, l: 3 },  
   { id: 3, value: 'C', r: 6, l: 7 },  
