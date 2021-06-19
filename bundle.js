@@ -11,10 +11,9 @@ const getHeadAndTreeMap = function (treeArray) {
 
 const constructTree = function (root, tMap) {
   if (!root) throw Error('Invalid Node!')
-  const children = root.children
-  if (!children) return root
-  if (children.length > 0) root.left = constructTree(tMap[children[0]], tMap)
-  if (children.length > 1) root.right = constructTree(tMap[children[1]], tMap)
+  if (!root.l && !root.r) return root
+  if (root.l) root.left = constructTree(tMap[root.l], tMap)
+  if (root.r) root.right = constructTree(tMap[root.r], tMap)
   return root
 }
 
@@ -42,12 +41,12 @@ const positionNodes = function (root, minHalfDistance) {
 }
 
 const calcExactPositions = function (root, parentX, parentY, nodeToNodeHeight) {
-  if (!root) return {left: parentX, right: parentX, top: 0, bottom: parentY}
+  if (!root) return { left: parentX, right: parentX, top: 0, bottom: parentY }
   root.x += parentX
   root.y = parentY + nodeToNodeHeight
   const l = calcExactPositions(root.left, root.x, root.y, nodeToNodeHeight)
   const r = calcExactPositions(root.right, root.x, root.y, nodeToNodeHeight)
-  return {left: Math.min(l.left, r.left), right: Math.max(l.right, r.right), top: 0, bottom: Math.max(l.bottom, r.bottom)}
+  return { left: Math.min(l.left, r.left), right: Math.max(l.right, r.right), top: 0, bottom: Math.max(l.bottom, r.bottom) }
 }
 
 const applyOffset = function (root, offsetX, offsetY) {
@@ -71,9 +70,9 @@ module.exports = {
 const Tree = require('./tree')
 
 const t1 = [
-  { id: 1, value: 1, children: [2, 3] }, // head
-  { id: 2, value: 2, children: [4, 5] },
-  { id: 3, value: 3, children: [6, 7] },
+  { id: 1, value: 1, l: 2, r: 3 }, // head
+  { id: 2, value: 2, l: 4, r: 5 },
+  { id: 3, value: 3, l: 6, r: 7 },
   { id: 4, value: 4 },
   { id: 5, value: 5 },
   { id: 6, value: 6 },
@@ -81,23 +80,38 @@ const t1 = [
 ]
 
 const t2 = [
-  { id: 1, value: 1, children: [2] }, // head
-  { id: 2, value: 2, children: [4, 3] },
-  { id: 3, value: 3, children: [6, 7] },
-  { id: 4, value: 4, children: [5] },
+  { id: 1, value: 1, l: 2 }, // head
+  { id: 2, value: 2, l: 4, r: 3 },
+  { id: 3, value: 3, l: 6, r: 7 },
+  { id: 4, value: 4, l: 5 },
   { id: 5, value: 5 },
   { id: 6, value: 6 },
   { id: 7, value: 7 }
 ]
 
+const t3 = [
+  { id: 1, value: 'A', r: 2, l: 8 }, // head
+  { id: 2, value: 'B', r: 4, l: 3 },
+  { id: 3, value: 'C', r: 6, l: 7 },
+  { id: 4, value: 'D', r: 5 },
+  { id: 5, value: 'E' },
+  { id: 6, value: 'F' },
+  { id: 7, value: 'G' },
+  { id: 8, value: 'H' }
+]
 
-let canvas1 = document.getElementById('tree-canv1')
-let tree1 = new Tree(t1)
+const canvas1 = document.getElementById('tree-canv1')
+const tree1 = new Tree(t1)
 tree1.plot(canvas1)
 
-let canvas2 = document.getElementById('tree-canv2')
-let tree2 = new Tree(t2)
+const canvas2 = document.getElementById('tree-canv2')
+const tree2 = new Tree(t2)
 tree2.plot(canvas2)
+
+const canvas3 = document.getElementById('tree-canv3')
+const tree3 = new Tree(t3)
+tree3.plot(canvas3)
+
 },{"./tree":3}],3:[function(require,module,exports){
 const core = require('./core')
 const DEFAULT_MARGIN = 5
@@ -118,7 +132,7 @@ class Tree {
     this.strokeWidth = DEFAULT_STROKE_WIDTH
   }
 
-  constructTree() {
+  constructTree () {
     const [head, tMap] = core.getHeadAndTreeMap(this.tree)
     const root = core.constructTree(head, tMap)
     return root
@@ -133,7 +147,7 @@ class Tree {
     return { cv_width: bounds.right - bounds.left + 2 * margin, cv_height: bounds.bottom - bounds.top + 2 * margin }
   }
 
-  getContext(canv) {
+  getContext (canv) {
     const ctx = canv.getContext('2d')
     this.setStyle(ctx)
     return ctx
@@ -173,11 +187,11 @@ class Tree {
     this.drawLine(canv, p0[0], p0[1], p1[0], p1[1])
   }
 
-  findMaxTextSize(canv, root) {
+  findMaxTextSize (canv, root) {
     if (!root) return 0
     const ctx = this.getContext(canv)
     ctx.font = '20px serif'
-    let tSize = ctx.measureText(root.value)
+    const tSize = ctx.measureText(root.value)
     return Math.max(tSize.width, this.findMaxTextSize(root.left), this.findMaxTextSize(root.right))
   }
 
@@ -191,36 +205,36 @@ class Tree {
     this.drawTree(canv, root.right, radius)
   }
 
-  setMargin(margin) {
+  setMargin (margin) {
     this.margin = margin
     return this
   }
 
-  setHSeparation(hSeparation) {
+  setHSeparation (hSeparation) {
     this.hSeparation = hSeparation
     return this
   }
 
-  setVSeparation(vSeparation) {
+  setVSeparation (vSeparation) {
     this.vSeparation = vSeparation
     return this
   }
 
-  setStrokeWidth(width) {
+  setStrokeWidth (width) {
     this.strokeWidth = width
     return this
   }
 
-  setStyle(ctx) {
+  setStyle (ctx) {
     ctx.lineWidth = this.strokeWidth
   }
 
   plot (canv) {
     if (!canv || !canv.getContext) throw Error('Wrong canvas passed or canvas is not supported!')
-    let root = this.constructTree()
-    let maxTextSize = this.findMaxTextSize(canv, root)
-    let radius = Math.min((maxTextSize >>> 1) + 8, MAX_RADIUS)
-    let [mar, vsep, hsep] = [this.margin, this.hSeparation, this.vSeparation].map((x)=> x + 2 * radius)
+    const root = this.constructTree()
+    const maxTextSize = this.findMaxTextSize(canv, root)
+    const radius = Math.min((maxTextSize >>> 1) + 8, MAX_RADIUS)
+    const [mar, vsep, hsep] = [this.margin, this.hSeparation, this.vSeparation].map((x) => x + 2 * radius)
     const measurements = this.measure(root, mar, hsep, vsep)
     console.log(measurements.cv_width, measurements.cv_height)
     console.log(measurements)

@@ -17,7 +17,7 @@ class Tree {
     this.strokeWidth = DEFAULT_STROKE_WIDTH
   }
 
-  constructTree() {
+  constructTree () {
     const [head, tMap] = core.getHeadAndTreeMap(this.tree)
     const root = core.constructTree(head, tMap)
     return root
@@ -32,7 +32,7 @@ class Tree {
     return { cv_width: bounds.right - bounds.left + 2 * margin, cv_height: bounds.bottom - bounds.top + 2 * margin }
   }
 
-  getContext(canv) {
+  getContext (canv) {
     const ctx = canv.getContext('2d')
     this.setStyle(ctx)
     return ctx
@@ -72,11 +72,11 @@ class Tree {
     this.drawLine(canv, p0[0], p0[1], p1[0], p1[1])
   }
 
-  findMaxTextSize(canv, root) {
+  findMaxTextSize (canv, root) {
     if (!root) return 0
     const ctx = this.getContext(canv)
     ctx.font = '20px serif'
-    let tSize = ctx.measureText(root.value)
+    const tSize = ctx.measureText(root.value)
     return Math.max(tSize.width, this.findMaxTextSize(root.left), this.findMaxTextSize(root.right))
   }
 
@@ -90,36 +90,36 @@ class Tree {
     this.drawTree(canv, root.right, radius)
   }
 
-  setMargin(margin) {
+  setMargin (margin) {
     this.margin = margin
     return this
   }
 
-  setHSeparation(hSeparation) {
+  setHSeparation (hSeparation) {
     this.hSeparation = hSeparation
     return this
   }
 
-  setVSeparation(vSeparation) {
+  setVSeparation (vSeparation) {
     this.vSeparation = vSeparation
     return this
   }
 
-  setStrokeWidth(width) {
+  setStrokeWidth (width) {
     this.strokeWidth = width
     return this
   }
 
-  setStyle(ctx) {
+  setStyle (ctx) {
     ctx.lineWidth = this.strokeWidth
   }
 
   plot (canv) {
     if (!canv || !canv.getContext) throw Error('Wrong canvas passed or canvas is not supported!')
-    let root = this.constructTree()
-    let maxTextSize = this.findMaxTextSize(canv, root)
-    let radius = Math.min((maxTextSize >>> 1) + 8, MAX_RADIUS)
-    let [mar, vsep, hsep] = [this.margin, this.hSeparation, this.vSeparation].map((x)=> x + 2 * radius)
+    const root = this.constructTree()
+    const maxTextSize = this.findMaxTextSize(canv, root)
+    const radius = Math.min((maxTextSize >>> 1) + 8, MAX_RADIUS)
+    const [mar, vsep, hsep] = [this.margin, this.hSeparation, this.vSeparation].map((x) => x + 2 * radius)
     const measurements = this.measure(root, mar, hsep, vsep)
     console.log(measurements.cv_width, measurements.cv_height)
     console.log(measurements)

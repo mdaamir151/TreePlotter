@@ -10,10 +10,9 @@ const getHeadAndTreeMap = function (treeArray) {
 
 const constructTree = function (root, tMap) {
   if (!root) throw Error('Invalid Node!')
-  const children = root.children
-  if (!children) return root
-  if (children.length > 0) root.left = constructTree(tMap[children[0]], tMap)
-  if (children.length > 1) root.right = constructTree(tMap[children[1]], tMap)
+  if (!root.l && !root.r) return root
+  if (root.l) root.left = constructTree(tMap[root.l], tMap)
+  if (root.r) root.right = constructTree(tMap[root.r], tMap)
   return root
 }
 
@@ -41,12 +40,12 @@ const positionNodes = function (root, minHalfDistance) {
 }
 
 const calcExactPositions = function (root, parentX, parentY, nodeToNodeHeight) {
-  if (!root) return {left: parentX, right: parentX, top: 0, bottom: parentY}
+  if (!root) return { left: parentX, right: parentX, top: 0, bottom: parentY }
   root.x += parentX
   root.y = parentY + nodeToNodeHeight
   const l = calcExactPositions(root.left, root.x, root.y, nodeToNodeHeight)
   const r = calcExactPositions(root.right, root.x, root.y, nodeToNodeHeight)
-  return {left: Math.min(l.left, r.left), right: Math.max(l.right, r.right), top: 0, bottom: Math.max(l.bottom, r.bottom)}
+  return { left: Math.min(l.left, r.left), right: Math.max(l.right, r.right), top: 0, bottom: Math.max(l.bottom, r.bottom) }
 }
 
 const applyOffset = function (root, offsetX, offsetY) {
