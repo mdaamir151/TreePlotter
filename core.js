@@ -1,6 +1,3 @@
-const MIN_HD = 45 // min half distance between siblings
-const LINE_H = 50 // vertical distance between parent and children
-const INT_MAX = 1000000
 
 const getHeadAndTreeMap = function (treeArray) {
   const head = treeArray[0]
@@ -22,7 +19,7 @@ const constructTree = function (root, tMap) {
 
 const findShortestDistance = function (root1, root2) {
   if (!root1 || !root2) return 0
-  let d = INT_MAX
+  let d = Number.MAX_SAFE_INTEGER
   let ls = root1; let rs = root2
   while (ls && rs) {
     d = Math.min(d, rs.x - ls.x)
@@ -32,23 +29,23 @@ const findShortestDistance = function (root1, root2) {
   return d
 }
 
-const positionNodes = function (root) {
+const positionNodes = function (root, minHalfDistance) {
   if (!root) return
   root.x = 0
   if (!root.left && !root.right) return
-  positionNodes(root.left)
-  positionNodes(root.right)
+  positionNodes(root.left, minHalfDistance)
+  positionNodes(root.right, minHalfDistance)
   const d = findShortestDistance(root.left, root.right)
-  if (root.left) root.left.x = -(MIN_HD - d / 2)
-  if (root.right) root.right.x = (MIN_HD - d / 2)
+  if (root.left) root.left.x = -(minHalfDistance - d / 2)
+  if (root.right) root.right.x = (minHalfDistance - d / 2)
 }
 
-const calcExactPositions = function (root, parentX = 0, parentY = -LINE_H) {
+const calcExactPositions = function (root, parentX, parentY, nodeToNodeHeight) {
   if (!root) return {left: parentX, right: parentX, top: 0, bottom: parentY}
   root.x += parentX
-  root.y = parentY + LINE_H
-  const l = calcExactPositions(root.left, root.x, root.y)
-  const r = calcExactPositions(root.right, root.x, root.y)
+  root.y = parentY + nodeToNodeHeight
+  const l = calcExactPositions(root.left, root.x, root.y, nodeToNodeHeight)
+  const r = calcExactPositions(root.right, root.x, root.y, nodeToNodeHeight)
   return {left: Math.min(l.left, r.left), right: Math.max(l.right, r.right), top: 0, bottom: Math.max(l.bottom, r.bottom)}
 }
 

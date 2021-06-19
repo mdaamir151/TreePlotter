@@ -21,6 +21,10 @@ const t2 = [
 ]
 
 
-let canvas = document.getElementById('tree-canv')
-let tree = new Tree(t2)
-tree.plot(canvas)
+let canvas1 = document.getElementById('tree-canv1')
+let tree1 = new Tree(t1)
+tree1.plot(canvas1)
+
+let canvas2 = document.getElementById('tree-canv2')
+let tree2 = new Tree(t2)
+tree2.plot(canvas2)
