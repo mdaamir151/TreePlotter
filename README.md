@@ -33,5 +33,5 @@ let tree2 = new Tree(t2)
 tree2.plot(canvas2)  
 
 Above trees are rendered as:  
-![alt Image](https://github.com/mdaamir151/TreePlotter/blob/main/image.jpg?raw=true)
+![alt Image](https://github.com/mdaamir151/TreePlotter/blob/main/image.png?raw=true)
 
