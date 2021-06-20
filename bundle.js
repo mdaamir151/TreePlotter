@@ -73,7 +73,7 @@ module.exports = {
 },{}],2:[function(require,module,exports){
 const Tree = require('./tree')
 
-const t1 = [
+/*const t1 = [
   { id: 1, value: 1, l: 2, r: 3 }, // head
   { id: 2, value: 2, l: 4, r: 5 },
   { id: 3, value: 3, l: 6, r: 7 },
@@ -115,18 +115,44 @@ const t3 = [
   { id: 7, value: 'G' },
   { id: 8, value: 'H' }
 ]
+*/
+const draw = function() {
+    const treeText = document.getElementById('tree-text')
+    const treeDiv = document.getElementById('trees')
+    let text = treeText.innerText || ''
+    if (text === '') return
+    let formattedText = text.replace(/[^:\s{},\[\]]+/g, (match) => {
+        return '"' + match + '"'
+    })
+    let treeArray = ''
+    try {
+        treeArray = JSON.parse(formattedText)
+    } catch (e) {
+        console.log(e)
+        alert('Invalid value found!')
+    }
+    let t = treeArray[0]
+    if (t instanceof Array) {
+        treeArray.forEach((tree) => {
+            let tr = new Tree(tree)
+            console.log(tree)
+            let canv = document.createElement('canvas')
+            treeDiv.append(canv)
+            tr.plot(canv)
+        })
+    } else {
+        let tr = new Tree(treeArray)
+        let canv = document.createElement('canvas')
+        treeDiv.append(canv)
+        tr.plot(canv)
+    }
+}
 
-const canvas1 = document.getElementById('tree-canv1')
-const tree1 = new Tree(t1)
-tree1.plot(canvas1)
+draw()
 
-const canvas2 = document.getElementById('tree-canv2')
-const tree2 = new Tree(t2)
-tree2.plot(canvas2)
-
-const canvas3 = document.getElementById('tree-canv3')
-const tree3 = new Tree(t3)
-tree3.plot(canvas3)
+document.getElementById('draw').addEventListener('click', ()=>{
+  draw()
+})
 
 },{"./tree":3}],3:[function(require,module,exports){
 const core = require('./core')
