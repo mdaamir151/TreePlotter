@@ -18,11 +18,15 @@ const constructTree = function (root, tMap) {
 }
 
 const findShortestDistance = function (root1, root2) {
+
   if (!root1 || !root2) return 0
   let d = Number.MAX_SAFE_INTEGER
   let ls = root1; let rs = root2
+  let lspX = 0, rspX = 0
   while (ls && rs) {
-    d = Math.min(d, rs.x - ls.x)
+    d = Math.min(d, (rs.x + rspX) - (ls.x + lspX))
+    lspX += ls.x
+    rspX += rs.x
     ls = ls.right || ls.left
     rs = rs.left || rs.right
   }
@@ -73,10 +77,22 @@ const t1 = [
   { id: 1, value: 1, l: 2, r: 3 }, // head
   { id: 2, value: 2, l: 4, r: 5 },
   { id: 3, value: 3, l: 6, r: 7 },
-  { id: 4, value: 4 },
-  { id: 5, value: 5 },
-  { id: 6, value: 6 },
-  { id: 7, value: 7 }
+  { id: 4, value: 4, l: 8, r: 9 },
+  { id: 5, value: 5, l:10, r: 11 },
+  { id: 6, value: 6, l: 12, r: 13 },
+  { id: 7, value: 7, l: 14, r: 15 },
+  { id: 8, value: 8 },
+  { id: 9, value: 9 },
+  { id: 10, value: 10 },
+  { id: 11, value: 11, r: 16 },
+  { id: 12, value: 12, l: 17 },
+  { id: 13, value: 13, r: 18 },
+  { id: 14, value: 14, l: 19 },
+  { id: 15, value: 15 },
+  { id: 16, value: 16 },
+  { id: 17, value: 17 },
+  { id: 18, value: 18 },
+  { id: 19, value: 19 },
 ]
 
 const t2 = [
@@ -139,8 +155,6 @@ class Tree {
   }
 
   measure (root, margin, hSeparation, vSeparation) {
-    console.log(margin, hSeparation, vSeparation)
-    console.log(root)
     core.positionNodes(root, hSeparation >>> 1)
     const bounds = core.calcExactPositions(root, 0, -vSeparation, vSeparation)
     core.applyOffset(root, -bounds.left + margin, -bounds.top + margin)
@@ -192,7 +206,7 @@ class Tree {
     const ctx = this.getContext(canv)
     ctx.font = '20px serif'
     const tSize = ctx.measureText(root.value)
-    return Math.max(tSize.width, this.findMaxTextSize(root.left), this.findMaxTextSize(root.right))
+    return Math.max(tSize.width, this.findMaxTextSize(canv, root.left), this.findMaxTextSize(canv, root.right))
   }
 
   drawTree (canv, root, radius) {
@@ -236,8 +250,6 @@ class Tree {
     const radius = Math.min((maxTextSize >>> 1) + 8, MAX_RADIUS)
     const [mar, vsep, hsep] = [this.margin, this.hSeparation, this.vSeparation].map((x) => x + 2 * radius)
     const measurements = this.measure(root, mar, hsep, vsep)
-    console.log(measurements.cv_width, measurements.cv_height)
-    console.log(measurements)
     canv.width = measurements.cv_width
     canv.height = measurements.cv_height
     this.drawTree(canv, root, radius)

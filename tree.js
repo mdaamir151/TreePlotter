@@ -24,8 +24,6 @@ class Tree {
   }
 
   measure (root, margin, hSeparation, vSeparation) {
-    console.log(margin, hSeparation, vSeparation)
-    console.log(root)
     core.positionNodes(root, hSeparation >>> 1)
     const bounds = core.calcExactPositions(root, 0, -vSeparation, vSeparation)
     core.applyOffset(root, -bounds.left + margin, -bounds.top + margin)
@@ -77,7 +75,7 @@ class Tree {
     const ctx = this.getContext(canv)
     ctx.font = '20px serif'
     const tSize = ctx.measureText(root.value)
-    return Math.max(tSize.width, this.findMaxTextSize(root.left), this.findMaxTextSize(root.right))
+    return Math.max(tSize.width, this.findMaxTextSize(canv, root.left), this.findMaxTextSize(canv, root.right))
   }
 
   drawTree (canv, root, radius) {
@@ -121,8 +119,6 @@ class Tree {
     const radius = Math.min((maxTextSize >>> 1) + 8, MAX_RADIUS)
     const [mar, vsep, hsep] = [this.margin, this.hSeparation, this.vSeparation].map((x) => x + 2 * radius)
     const measurements = this.measure(root, mar, hsep, vsep)
-    console.log(measurements.cv_width, measurements.cv_height)
-    console.log(measurements)
     canv.width = measurements.cv_width
     canv.height = measurements.cv_height
     this.drawTree(canv, root, radius)

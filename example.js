@@ -4,10 +4,22 @@ const t1 = [
   { id: 1, value: 1, l: 2, r: 3 }, // head
   { id: 2, value: 2, l: 4, r: 5 },
   { id: 3, value: 3, l: 6, r: 7 },
-  { id: 4, value: 4 },
-  { id: 5, value: 5 },
-  { id: 6, value: 6 },
-  { id: 7, value: 7 }
+  { id: 4, value: 4, l: 8, r: 9 },
+  { id: 5, value: 5, l:10, r: 11 },
+  { id: 6, value: 6, l: 12, r: 13 },
+  { id: 7, value: 7, l: 14, r: 15 },
+  { id: 8, value: 8 },
+  { id: 9, value: 9 },
+  { id: 10, value: 10 },
+  { id: 11, value: 11, r: 16 },
+  { id: 12, value: 12, l: 17 },
+  { id: 13, value: 13, r: 18 },
+  { id: 14, value: 14, l: 19 },
+  { id: 15, value: 15 },
+  { id: 16, value: 16 },
+  { id: 17, value: 17 },
+  { id: 18, value: 18 },
+  { id: 19, value: 19 },
 ]
 
 const t2 = [

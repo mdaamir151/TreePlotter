@@ -17,11 +17,15 @@ const constructTree = function (root, tMap) {
 }
 
 const findShortestDistance = function (root1, root2) {
+
   if (!root1 || !root2) return 0
   let d = Number.MAX_SAFE_INTEGER
   let ls = root1; let rs = root2
+  let lspX = 0, rspX = 0
   while (ls && rs) {
-    d = Math.min(d, rs.x - ls.x)
+    d = Math.min(d, (rs.x + rspX) - (ls.x + lspX))
+    lspX += ls.x
+    rspX += rs.x
     ls = ls.right || ls.left
     rs = rs.left || rs.right
   }
